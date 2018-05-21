@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import warnings
 
@@ -85,7 +85,7 @@ def upload_to(field_path, default):
     ``UPLOAD_TO_HANDLERS`` setting.
     """
     from mezzanine.conf import settings
-    for k, v in settings.UPLOAD_TO_HANDLERS.items():
+    for k, v in list(settings.UPLOAD_TO_HANDLERS.items()):
         if k.lower() == field_path.lower():
             return import_dotted_path(v)
     return default
@@ -143,7 +143,7 @@ class ModelMixinBase(type):
                                        "with a value that is a valid model.")
         # Copy fields and methods onto the model being mixed into, and
         # return it as the definition for the mixin class itself.
-        for k, v in attrs.items():
+        for k, v in list(attrs.items()):
             if isinstance(v, Field):
                 v.contribute_to_class(mixin_for, k)
             elif k != "__module__":

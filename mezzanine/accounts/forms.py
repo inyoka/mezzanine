@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.tokens import default_token_generator

@@ -10,7 +10,7 @@ that are only read during startup shouldn't be editable, since changing
 them would require an application reload.
 """
 
-from __future__ import unicode_literals
+
 from future.builtins import range
 
 from django.conf import settings

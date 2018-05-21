@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import bytes, str
 
 from unittest import skipUnless
@@ -24,12 +24,12 @@ class ConfTests(TestCase):
         type_modifiers = {int: lambda s: s + 1,
                           float: lambda s: s + 1.0,
                           bool: lambda s: not s,
-                          str: lambda s: s + u"test",
+                          str: lambda s: s + "test",
                           bytes: lambda s: s + b"test"}
 
         # Store a non-default value for every editable setting in the database
         editable_settings = {}
-        for setting in registry.values():
+        for setting in list(registry.values()):
             if setting["editable"]:
                 modified = type_modifiers[setting["type"]](setting["default"])
                 Setting.objects.create(name=setting["name"], value=modified)
@@ -52,7 +52,7 @@ class ConfTests(TestCase):
                 connections_override[conn.alias] = conn
 
         def initialise_thread():
-            for alias, connection in connections_override.items():
+            for alias, connection in list(connections_override.items()):
                 connections[alias] = connection
 
         thread_pool = multiprocessing.pool.ThreadPool(8, initialise_thread)
@@ -71,7 +71,7 @@ class ConfTests(TestCase):
                 name, retrieved_value = setting
                 self.assertEqual(retrieved_value, editable_settings[name])
         finally:
-            for conn in connections_override.values():
+            for conn in list(connections_override.values()):
                 conn.allow_thread_sharing = conn._old_allow_thread_sharing
                 del conn._old_allow_thread_sharing
             Setting.objects.all().delete()
@@ -88,19 +88,19 @@ class ConfTests(TestCase):
 
         # Find an editable setting for each supported type.
         names_by_type = {}
-        for setting in registry.values():
+        for setting in list(registry.values()):
             if setting["editable"] and setting["type"] not in names_by_type:
                 names_by_type[setting["type"]] = setting["name"]
         # Create a modified value for each setting and save it.
         values_by_name = {}
-        for (setting_type, setting_name) in names_by_type.items():
+        for (setting_type, setting_name) in list(names_by_type.items()):
             setting_value = registry[setting_name]["default"]
             if setting_type in (int, float):
                 setting_value += 1
             elif setting_type is bool:
                 setting_value = not setting_value
             elif setting_type is str:
-                setting_value += u"test"
+                setting_value += "test"
             elif setting_type is bytes:
                 setting_value += b"test"
             else:
@@ -109,7 +109,7 @@ class ConfTests(TestCase):
             values_by_name[setting_name] = setting_value
             Setting.objects.create(name=setting_name, value=setting_value)
         # Load the settings and make sure the DB values have persisted.
-        for (name, value) in values_by_name.items():
+        for (name, value) in list(values_by_name.items()):
             self.assertEqual(getattr(settings, name), value)
 
     def test_editable_override(self):

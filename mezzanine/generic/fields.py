@@ -1,4 +1,4 @@
-from __future__ import division, unicode_literals
+
 from future.builtins import str
 
 from copy import copy
@@ -73,7 +73,7 @@ class BaseGenericRelation(GenericRelation):
         super(BaseGenericRelation, self).contribute_to_class(cls, name)
         # Not applicable to abstract classes, and in fact will break.
         if not cls._meta.abstract:
-            for (name_string, field) in self.fields.items():
+            for (name_string, field) in list(self.fields.items()):
                 if "%s" in name_string:
                     name_string = name_string % name
                 extant_fields = cls._meta._forward_fields_map

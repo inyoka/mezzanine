@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import django
 from future.builtins import int, zip
@@ -86,7 +86,7 @@ def search_fields_to_dict(fields):
     try:
         int(list(dict(fields).values())[0])
     except (TypeError, ValueError):
-        fields = dict(zip(fields, [1] * len(fields)))
+        fields = dict(list(zip(fields, [1] * len(fields))))
     return fields
 
 
@@ -155,11 +155,11 @@ class SearchableQuerySet(QuerySet):
 
         # Create the queryset combining each set of terms.
         excluded = [reduce(iand, [~Q(**{"%s__icontains" % f: t[1:]}) for f in
-            self._search_fields.keys()]) for t in terms if t[0:1] == "-"]
+            list(self._search_fields.keys())]) for t in terms if t[0:1] == "-"]
         required = [reduce(ior, [Q(**{"%s__icontains" % f: t[1:]}) for f in
-            self._search_fields.keys()]) for t in terms if t[0:1] == "+"]
+            list(self._search_fields.keys())]) for t in terms if t[0:1] == "+"]
         optional = [reduce(ior, [Q(**{"%s__icontains" % f: t}) for f in
-            self._search_fields.keys()]) for t in terms if t[0:1] not in "+-"]
+            list(self._search_fields.keys())]) for t in terms if t[0:1] not in "+-"]
         queryset = self
         if excluded:
             queryset = queryset.filter(reduce(iand, excluded))
@@ -207,7 +207,7 @@ class SearchableQuerySet(QuerySet):
             for i, result in enumerate(results):
                 count = 0
                 related_weights = []
-                for (field, weight) in self._search_fields.items():
+                for (field, weight) in list(self._search_fields.items()):
                     if "__" in field:
                         related_weights.append(weight)
                     for term in self._search_terms:

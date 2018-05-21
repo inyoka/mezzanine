@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import map, str
 
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -143,7 +143,7 @@ class Rating(models.Model):
         """
         Validate that the rating falls between the min and max values.
         """
-        valid = map(str, settings.RATINGS_RANGE)
+        valid = list(map(str, settings.RATINGS_RANGE))
         if str(self.value) not in valid:
             raise ValueError("Invalid rating. %s is not in %s" % (self.value,
                 ", ".join(valid)))

@@ -1,4 +1,4 @@
-from __future__ import division, unicode_literals
+
 
 import warnings
 
@@ -9,11 +9,11 @@ from datetime import datetime, timedelta
 try:
     from urllib.parse import urlencode
 except ImportError:  # Python 2
-    from urllib import urlencode
+    from urllib.parse import urlencode
 try:
     from urllib.request import Request, urlopen
 except ImportError:  # Python 2
-    from urllib2 import Request, urlopen
+    from urllib.request import Request, urlopen
 
 import django
 from django.contrib.auth import get_permission_codename
@@ -90,7 +90,7 @@ def is_spam_akismet(request, form, url):
         "permalink": host + url,
         "comment_type": "comment" if "comment" in request.POST else "form",
     }
-    for name, field in form.fields.items():
+    for name, field in list(form.fields.items()):
         data_field = None
         if field.label and field.label.lower() in ("name", _("Name").lower()):
             data_field = "comment_author"

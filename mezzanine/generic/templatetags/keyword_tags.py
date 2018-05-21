@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import int, round
 
 from django.contrib.contenttypes.models import ContentType

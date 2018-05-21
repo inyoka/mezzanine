@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from django.shortcuts import redirect
 from django.template import RequestContext
@@ -34,7 +34,7 @@ def form_processor(request, page):
         if is_spam(request, form, url):
             return redirect(url)
         attachments = []
-        for f in form.files.values():
+        for f in list(form.files.values()):
             f.seek(0)
             attachments.append((f.name, f.read()))
         entry = form.save()
@@ -42,7 +42,7 @@ def form_processor(request, page):
         if not subject:
             subject = "%s - %s" % (page.form.title, entry.entry_time)
         fields = [(v.label, format_value(form.cleaned_data[k]))
-                  for (k, v) in form.fields.items()]
+                  for (k, v) in list(form.fields.items())]
         context = {
             "fields": fields,
             "message": page.form.email_message,

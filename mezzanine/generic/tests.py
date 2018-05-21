@@ -1,4 +1,4 @@
-from __future__ import division, unicode_literals
+
 
 from django.template import Context
 from django.template import Template
@@ -149,7 +149,7 @@ class GenericTests(TestCase):
             request.user = self._user
             request.session = {}
         response = comment(request)
-        self.assertEquals(response.status_code, 400)
+        self.assertEqual(response.status_code, 400)
 
     def test_multiple_comment_forms(self):
 

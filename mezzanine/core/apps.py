@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from django import VERSION as DJANGO_VERSION
 from django.apps import AppConfig

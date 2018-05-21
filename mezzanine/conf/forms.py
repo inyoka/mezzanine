@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import int
 
 from collections import defaultdict
@@ -104,7 +104,7 @@ class SettingsForm(forms.Form):
         Save each of the settings to the DB.
         """
         active_language = get_language()
-        for (name, value) in self.cleaned_data.items():
+        for (name, value) in list(self.cleaned_data.items()):
             if name not in registry:
                 name, code = name.rsplit('_modeltranslation_', 1)
             else:

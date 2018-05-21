@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import int
 
 from collections import defaultdict
@@ -10,6 +10,7 @@ from mezzanine import template
 from mezzanine.conf import settings
 from mezzanine.generic.models import ThreadedComment
 from mezzanine.utils.importing import import_dotted_path
+import collections
 
 
 register = template.Library()
@@ -88,6 +89,6 @@ def comment_filter(comment_text):
     if not filter_func:
         def filter_func(s):
             return linebreaksbr(urlize(s, autoescape=True), autoescape=True)
-    elif not callable(filter_func):
+    elif not isinstance(filter_func, collections.Callable):
         filter_func = import_dotted_path(filter_func)
     return filter_func(comment_text)

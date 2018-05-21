@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import int
 from future.builtins import input
 
@@ -96,10 +96,10 @@ class Command(BaseCommand):
                 self.stdout.write("While copying %s [from %s]:\n" %
                                   (name, app))
                 self.stdout.write("Template exists%s.\n" % prev)
-                confirm = input("Overwrite?  (yes/no/abort): ")
+                confirm = eval(input("Overwrite?  (yes/no/abort): "))
                 while confirm not in ("yes", "no", "abort"):
-                    confirm = input(
-                        "Please enter either 'yes', 'no' or 'abort': ")
+                    confirm = eval(input(
+                        "Please enter either 'yes', 'no' or 'abort': "))
                 if confirm == "abort":
                     self.stdout.write("Aborted\n")
                     break  # exit templates copying loop

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import str
 
 from copy import copy
@@ -50,7 +50,7 @@ class SettingsAdmin(admin.ModelAdmin):
             info(request, _("Settings were successfully updated."))
             return self.changelist_redirect()
         extra_context["settings_form"] = settings_form
-        extra_context["title"] = u"%s %s" % (
+        extra_context["title"] = "%s %s" % (
             _("Change"), force_text(Setting._meta.verbose_name_plural))
         return super(SettingsAdmin, self).changelist_view(request,
                                                             extra_context)

@@ -6,6 +6,7 @@ from functools import wraps
 
 import django
 from django.conf import settings
+import collections
 
 
 # Middleware mixin for Django 1.10
@@ -62,7 +63,7 @@ def get_related_model(field):
 
 def mark_safe(s):
     from django.utils.safestring import mark_safe as django_safe
-    if callable(s):
+    if isinstance(s, collections.Callable):
         @wraps(s)
         def wrapper(*args, **kwargs):
             return django_safe(*args, **kwargs)

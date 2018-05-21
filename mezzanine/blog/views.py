@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import str, int
 
 from calendar import month_name
@@ -43,13 +43,13 @@ def blog_post_list(request, tag=None, year=None, month=None, username=None,
     if category is not None:
         category = get_object_or_404(BlogCategory, slug=category)
         blog_posts = blog_posts.filter(categories=category)
-        templates.append(u"blog/blog_post_list_%s.html" %
+        templates.append("blog/blog_post_list_%s.html" %
                           str(category.slug))
     author = None
     if username is not None:
         author = get_object_or_404(User, username=username)
         blog_posts = blog_posts.filter(user=author)
-        templates.append(u"blog/blog_post_list_%s.html" % username)
+        templates.append("blog/blog_post_list_%s.html" % username)
 
     prefetch = ("categories", "keywords__keyword")
     blog_posts = blog_posts.select_related("user").prefetch_related(*prefetch)
@@ -77,7 +77,7 @@ def blog_post_detail(request, slug, year=None, month=None, day=None,
     context = {"blog_post": blog_post, "editable_obj": blog_post,
                "related_posts": related_posts}
     context.update(extra_context or {})
-    templates = [u"blog/blog_post_detail_%s.html" % str(slug), template]
+    templates = ["blog/blog_post_detail_%s.html" % str(slug), template]
     return TemplateResponse(request, templates, context)
 
 

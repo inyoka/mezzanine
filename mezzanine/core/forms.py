@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import str
 
 from datetime import datetime
@@ -30,7 +30,7 @@ class Html5Mixin(object):
         if hasattr(self, "fields"):
             first_field = None
 
-            for name, field in self.fields.items():
+            for name, field in list(self.fields.items()):
                 # Autofocus first non-hidden field
                 if not first_field and not field.widget.is_hidden:
                     first_field = field
@@ -154,7 +154,7 @@ def get_edit_form(obj, field_names, data=None, files=None):
         def __init__(self, *args, **kwargs):
             super(EditForm, self).__init__(*args, **kwargs)
             self.uuid = str(uuid4())
-            for f in self.fields.keys():
+            for f in list(self.fields.keys()):
                 field_class = self.fields[f].__class__
                 try:
                     widget = fields.WIDGETS[widget_overrides[field_class]]

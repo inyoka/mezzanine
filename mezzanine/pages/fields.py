@@ -1,7 +1,8 @@
-from __future__ import unicode_literals
+
 
 from mezzanine.conf import settings
 from mezzanine.core.fields import MultiChoiceField
+import collections
 
 
 class MenusField(MultiChoiceField):
@@ -32,7 +33,7 @@ class MenusField(MultiChoiceField):
         if self._overridden_default:
             # Even with user-provided default we'd rather not have it
             # forced to text. Compare with Field.get_default().
-            if callable(self.default):
+            if isinstance(self.default, collections.Callable):
                 default = self.default()
             else:
                 default = self.default

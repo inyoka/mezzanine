@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from django.conf import settings
 from django.conf.urls import include, url
@@ -48,7 +48,7 @@ class LazyAdminSite(AdminSite):
                     pass
         # Pick up any admin classes registered via decorator to the
         # default admin site.
-        for model, admin in default_site._registry.items():
+        for model, admin in list(default_site._registry.items()):
             self._deferred.append(("register", (model, admin.__class__), {}))
         # Call register/unregister.
         for name, args, kwargs in self._deferred:
@@ -82,7 +82,7 @@ class LazyAdminSite(AdminSite):
         # actual name, so that it can be reversed with multiple
         # languages are supported in the admin.
         User = get_user_model()
-        for admin in self._registry.values():
+        for admin in list(self._registry.values()):
             user_change_password = getattr(admin, "user_change_password", None)
             if user_change_password:
                 bits = (User._meta.app_label, User._meta.object_name.lower())

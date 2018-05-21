@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
@@ -20,9 +20,9 @@ from mezzanine.utils.sites import current_site_id
 User = get_user_model()
 
 try:
-    unicode
+    str
 except NameError:  # Python 3
-    unicode = lambda s: s
+    str = lambda s: s
 
 
 class PostsRSS(Feed):
@@ -68,10 +68,10 @@ class PostsRSS(Feed):
         return add_domain(self._site.domain, link, self._request.is_secure())
 
     def title(self):
-        return unicode(self._title)
+        return str(self._title)
 
     def description(self):
-        return unicode(self._description)
+        return str(self._description)
 
     def link(self):
         return self.add_domain(reverse("blog_post_list"))
@@ -100,7 +100,7 @@ class PostsRSS(Feed):
         absolute_urls_name = "mezzanine.utils.html.absolute_urls"
         if absolute_urls_name not in settings.RICHTEXT_FILTERS:
             description = absolute_urls(description)
-        return unicode(description)
+        return str(description)
 
     def categories(self):
         if not self._public:

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import os
 import sys
@@ -224,7 +224,7 @@ def set_dynamic_settings(s):
         s[setting] = tuple(s[setting])
 
     # Some settings tweaks for different DB engines.
-    for (key, db) in s["DATABASES"].items():
+    for (key, db) in list(s["DATABASES"].items()):
         shortname = db["ENGINE"].split(".")[-1]
         if shortname == "sqlite3":
             # If the Sqlite DB name doesn't contain a path, assume
@@ -261,11 +261,9 @@ def middlewares_or_subclasses_installed(needed_middlewares):
     def flatten(seqs):
         return (item for seq in seqs for item in seq)
 
-    middleware_items = map(import_string, middleware_setting)
-    middleware_classes = filter(
-        lambda m: isinstance(m, six.class_types),
-        middleware_items)
-    middleware_ancestors = set(flatten(map(getmro, middleware_classes)))
+    middleware_items = list(map(import_string, middleware_setting))
+    middleware_classes = [m for m in middleware_items if isinstance(m, six.class_types)]
+    middleware_ancestors = set(flatten(list(map(getmro, middleware_classes))))
 
     needed_middlewares = set(map(import_string, needed_middlewares))
 

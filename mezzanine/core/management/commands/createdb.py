@@ -1,4 +1,4 @@
-from __future__ import print_function, unicode_literals
+
 from future.builtins import int, input
 
 from socket import gethostname
@@ -63,20 +63,20 @@ class Command(BaseCommand):
     def confirm(self, prompt):
         if not self.interactive:
             return True
-        confirm = input(prompt)
+        confirm = eval(input(prompt))
         while confirm not in ("yes", "no"):
-            confirm = input("Please enter either 'yes' or 'no': ")
+            confirm = eval(input("Please enter either 'yes' or 'no': "))
         return confirm == "yes"
 
     def create_site(self):
         domain = "127.0.0.1:8000" if settings.DEBUG else gethostname()
         if self.interactive:
-            entered = input("\nA site record is required.\nPlease "
+            entered = eval(input("\nA site record is required.\nPlease "
                               "enter the domain and optional port in "
                               "the format 'domain:port'.\nFor example "
                               "'localhost:8000' or 'www.example.com'. "
                               "\nHit enter to use the default (%s): " %
-                            domain)
+                            domain))
             if entered:
                 domain = entered.strip("': ")
         if self.verbosity >= 1:

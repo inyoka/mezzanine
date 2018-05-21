@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import warnings
 
@@ -27,6 +27,7 @@ from mezzanine.utils.conf import middlewares_or_subclasses_installed
 from mezzanine.utils.deprecation import (MiddlewareMixin, is_authenticated)
 from mezzanine.utils.sites import current_site_id
 from mezzanine.utils.urls import next_url
+import collections
 
 
 class AdminLoginInterfaceSelectorMiddleware(MiddlewareMixin):
@@ -142,7 +143,7 @@ class UpdateCacheMiddleware(MiddlewareMixin):
         if anon and valid_status and marked_for_update and timeout:
             cache_key = cache_key_prefix(request) + request.get_full_path()
             _cache_set = lambda r: cache_set(cache_key, r.content, timeout)
-            if callable(getattr(response, "render", None)):
+            if isinstance(getattr(response, "render", None), collections.Callable):
                 response.add_post_render_callback(_cache_set)
             else:
                 _cache_set(response)
@@ -240,7 +241,7 @@ class SSLRedirectMiddleware(MiddlewareMixin):
 
     def languages(self):
         if not hasattr(self, "_languages"):
-            self._languages = dict(settings.LANGUAGES).keys()
+            self._languages = list(dict(settings.LANGUAGES).keys())
         return self._languages
 
     def process_request(self, request):

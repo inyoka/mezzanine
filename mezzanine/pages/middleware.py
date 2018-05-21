@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import MiddlewareNotUsed
@@ -104,7 +104,7 @@ class PageMiddleware(MiddlewareMixin):
                 return processor_response
             elif processor_response:
                 try:
-                    for k, v in processor_response.items():
+                    for k, v in list(processor_response.items()):
                         if k not in extra_context:
                             extra_context[k] = v
                 except (TypeError, ValueError):

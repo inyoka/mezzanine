@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import open, range, str
 
 from _ast import PyCF_ONLY_AST

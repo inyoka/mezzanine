@@ -1,4 +1,4 @@
-from __future__ import print_function, unicode_literals
+
 from future.builtins import open
 
 import os
@@ -224,8 +224,8 @@ def get_templates():
     Returns each of the templates with env vars injected.
     """
     injected = {}
-    for name, data in templates.items():
-        injected[name] = dict([(k, v % env) for k, v in data.items()])
+    for name, data in list(templates.items()):
+        injected[name] = dict([(k, v % env) for k, v in list(data.items())])
     return injected
 
 
@@ -569,7 +569,7 @@ def remove():
         run("rm -rf %s" % env.venv_path)
     if exists(env.proj_path):
         run("rm -rf %s" % env.proj_path)
-    for template in get_templates().values():
+    for template in list(get_templates().values()):
         remote_path = template["remote_path"]
         if exists(remote_path):
             sudo("rm %s" % remote_path)

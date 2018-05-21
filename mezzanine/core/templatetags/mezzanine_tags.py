@@ -1,12 +1,13 @@
-from __future__ import absolute_import, division, unicode_literals
+
 from future.builtins import int, open, str
 
 from hashlib import md5
 import os
+import collections
 try:
     from urllib.parse import quote, unquote
 except ImportError:
-    from urllib import quote, unquote
+    from urllib.parse import quote, unquote
 
 from django.apps import apps
 from django.contrib import admin
@@ -505,7 +506,7 @@ def editable(parsed, context, token):
         attr = field.pop()
         while field:
             obj = getattr(obj, field.pop(0))
-            if callable(obj):
+            if isinstance(obj, collections.Callable):
                 # Allows {% editable page.get_content_model.content %}
                 obj = obj()
         return obj, attr
@@ -569,7 +570,7 @@ def admin_app_list(request):
                                 item_index, item_title)
 
     # Add all registered models, using group and title from menu order.
-    for (model, model_admin) in admin.site._registry.items():
+    for (model, model_admin) in list(admin.site._registry.items()):
         opts = model._meta
         in_menu = not hasattr(model_admin, "in_menu") or model_admin.in_menu()
         if hasattr(model_admin, "in_menu"):
@@ -630,7 +631,7 @@ def admin_app_list(request):
                 })
 
     # Menu may also contain view or url pattern names given as (title, name).
-    for (item_url, item) in menu_order.items():
+    for (item_url, item) in list(menu_order.items()):
         app_index, app_title, item_index, item_title = item
         try:
             item_url = reverse(item_url)

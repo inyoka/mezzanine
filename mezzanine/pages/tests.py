@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from django.contrib.sites.models import Site
 from future.builtins import str
@@ -383,7 +383,7 @@ class PagesTests(TestCase):
         """
         from mezzanine.pages.page_processors import processor_for
 
-        @processor_for(u'test unicode string')
+        @processor_for('test unicode string')
         def test_page_processor(request, page):
             return {}
 

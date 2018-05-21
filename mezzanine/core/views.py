@@ -1,4 +1,4 @@
-from __future__ import absolute_import, unicode_literals
+
 from future.builtins import int, open, str
 
 import os
@@ -7,11 +7,12 @@ import mimetypes
 from json import dumps
 
 from django.template.response import TemplateResponse
+import collections
 
 try:
     from urllib.parse import urljoin, urlparse
 except ImportError:
-    from urlparse import urljoin, urlparse
+    from urllib.parse import urljoin, urlparse
 
 from django.apps import apps
 from django.contrib import admin
@@ -71,8 +72,8 @@ def direct_to_template(request, template, extra_context=None, **kwargs):
     """
     context = extra_context or {}
     context["params"] = kwargs
-    for (key, value) in context.items():
-        if callable(value):
+    for (key, value) in list(context.items()):
+        if isinstance(value, collections.Callable):
             context[key] = value()
     return TemplateResponse(request, template, context)
 
@@ -184,7 +185,7 @@ def displayable_links_js(request):
     # For each item's title, we use its model's verbose_name, but in the
     # case of Page subclasses, we just use "Page", and then sort the items
     # by whether they're a Page subclass or not, then by their URL.
-    for url, obj in Displayable.objects.url_map(for_user=request.user).items():
+    for url, obj in list(Displayable.objects.url_map(for_user=request.user).items()):
         title = getattr(obj, "titles", obj.title)
         real = hasattr(obj, "id")
         page = is_page(obj)

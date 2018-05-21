@@ -1,4 +1,4 @@
-from __future__ import absolute_import, unicode_literals
+
 from future.builtins import chr, int, str
 
 try:
@@ -10,8 +10,8 @@ try:
         class HTMLParseError(Exception):
             pass
 except ImportError:  # Python 2
-    from HTMLParser import HTMLParser, HTMLParseError
-    from htmlentitydefs import name2codepoint
+    from html.parser import HTMLParser, HTMLParseError
+    from html.entities import name2codepoint
 
 import re
 
@@ -46,7 +46,7 @@ def absolute_urls(html):
     request = current_request()
     if request is not None:
         dom = BeautifulSoup(html, "html.parser")
-        for tag, attr in ABSOLUTE_URL_TAGS.items():
+        for tag, attr in list(ABSOLUTE_URL_TAGS.items()):
             for node in dom.findAll(tag):
                 url = node.get(attr, "")
                 if url:

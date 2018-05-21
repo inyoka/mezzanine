@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 from future.builtins import str
 from future.utils import with_metaclass
 
@@ -7,7 +7,8 @@ try:
     from urllib.request import urlopen
     from urllib.parse import urlencode
 except ImportError:
-    from urllib import urlopen, urlencode
+    from urllib.request import urlopen
+    from urllib.parse import urlencode
 
 from django.apps import apps
 from django.contrib.contenttypes.fields import GenericForeignKey
@@ -193,7 +194,7 @@ class MetaData(models.Model):
         else:
             description = truncatewords_html(description, 100)
         try:
-            description = unicode(description)
+            description = str(description)
         except NameError:
             pass  # Python 3.
         return description

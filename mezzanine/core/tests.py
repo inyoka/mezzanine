@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 import re
 import pytz
@@ -15,7 +15,7 @@ try:
     from urllib.parse import urlencode
 except ImportError:
     # Python 2
-    from urllib import urlencode
+    from urllib.parse import urlencode
 
 from django.conf.urls import url
 from django.contrib.admin import AdminSite
@@ -323,7 +323,7 @@ class CoreTests(TestCase):
 
         # Go to admin-login, search for reset-link
         response = self.client.get('/admin/', follow=True)
-        self.assertContains(response, u'Forgot password?')
+        self.assertContains(response, 'Forgot password?')
         url = re.findall(
             b'\<a href\=["\']([^\'"]+)["\']\>Forgot password\?\<\/a\>',
             response.content

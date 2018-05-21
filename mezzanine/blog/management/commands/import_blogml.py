@@ -99,7 +99,7 @@ class Command(BaseImporterCommand):
             cat_title_txt = tuple(
                 (x.find("blogml:title", namespaces=ns).text
                  for x in cat_elements))
-            categories_dict = dict(zip(cat_ids, cat_title_txt))
+            categories_dict = dict(list(zip(cat_ids, cat_title_txt)))
             return categories_dict
 
         categories_found = _process_categories(tree)

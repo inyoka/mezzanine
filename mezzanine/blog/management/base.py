@@ -1,9 +1,9 @@
-from __future__ import print_function, unicode_literals
+
 from future.builtins import input, int
 try:
     from urllib.parse import urlparse
 except:
-    from urlparse import urlparse
+    from urllib.parse import urlparse
 
 from django.contrib.auth import get_user_model
 from django.contrib.redirects.models import Redirect
@@ -125,7 +125,7 @@ class BaseImporterCommand(BaseCommand):
         Truncates fields values for the given model. Prompts for a new
         value if truncation occurs.
         """
-        for field_name, value in fields.items():
+        for field_name, value in list(fields.items()):
             field = model._meta.get_field(field_name)
             max_length = getattr(field, "max_length", None)
             if not max_length:
@@ -135,10 +135,10 @@ class BaseImporterCommand(BaseCommand):
                 continue
             while len(value) > max_length:
                 encoded_value = value.encode("utf-8")
-                new_value = input("The value for the field %s.%s exceeds "
+                new_value = eval(input("The value for the field %s.%s exceeds "
                     "its maximum length of %s chars: %s\n\nEnter a new value "
                     "for it, or press return to have it truncated: " %
-                    (model.__name__, field_name, max_length, encoded_value))
+                    (model.__name__, field_name, max_length, encoded_value)))
                 value = new_value if new_value else value[:max_length]
             fields[field_name] = value
         return fields
@@ -181,7 +181,7 @@ class BaseImporterCommand(BaseCommand):
             if post_data["publish_date"] is None:
                 post_data["status"] = CONTENT_STATUS_DRAFT
             post, created = BlogPost.objects.get_or_create(**initial)
-            for k, v in post_data.items():
+            for k, v in list(post_data.items()):
                 setattr(post, k, v)
             post.save()
             if created and verbosity >= 1:

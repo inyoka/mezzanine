@@ -2,7 +2,7 @@
 Utils called from project_root/docs/conf.py when Sphinx
 documentation is generated.
 """
-from __future__ import division, print_function, unicode_literals
+
 from future.builtins import map, open, str
 
 from collections import OrderedDict
@@ -27,9 +27,9 @@ def deep_force_unicode(value):
     Recursively call force_text on value.
     """
     if isinstance(value, (list, tuple, set)):
-        value = type(value)(map(deep_force_unicode, value))
+        value = type(value)(list(map(deep_force_unicode, value)))
     elif isinstance(value, dict):
-        value = type(value)(map(deep_force_unicode, value.items()))
+        value = type(value)(list(map(deep_force_unicode, list(value.items()))))
     elif isinstance(value, Promise):
         value = force_text(value)
     return value
@@ -220,7 +220,7 @@ def build_changelog(docs_path, package_name="mezzanine"):
 
     # Write out the changelog.
     with open(changelog_file, "w") as f:
-        for version, version_info in versions.items():
+        for version, version_info in list(versions.items()):
             header = "Version %s (%s)" % (version, version_info["date"])
             f.write("%s\n" % header)
             f.write("%s\n" % ("-" * len(header)))

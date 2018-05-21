@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.tokens import default_token_generator
@@ -35,7 +35,7 @@ class AccountsTests(TestCase):
         try:
             profile_form = ProfileForm()
             ProfileFieldsForm = profile_form.get_profile_fields_form()
-            for name, field in ProfileFieldsForm().fields.items():
+            for name, field in list(ProfileFieldsForm().fields.items()):
                 if name != "id":
                     if hasattr(field, "choices"):
                         value = list(field.choices)[0][0]

@@ -1,4 +1,4 @@
-from __future__ import unicode_literals
+
 
 from collections import OrderedDict
 
@@ -9,6 +9,7 @@ from mezzanine.conf import settings
 from mezzanine.accounts import (get_profile_form, get_profile_user_fieldname,
                                 get_profile_for_user, ProfileNotConfigured)
 from mezzanine.accounts.forms import LoginForm
+import collections
 
 
 register = template.Library()
@@ -88,6 +89,6 @@ def username_or(user, attr):
     if not settings.ACCOUNTS_NO_USERNAME:
         attr = "username"
     value = getattr(user, attr)
-    if callable(value):
+    if isinstance(value, collections.Callable):
         value = value()
     return value
